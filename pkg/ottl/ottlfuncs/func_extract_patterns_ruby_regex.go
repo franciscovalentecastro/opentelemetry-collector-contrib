@@ -9,7 +9,8 @@ import (
 
 	"go.opentelemetry.io/collector/pdata/pcommon"
 
-	oniguruma "github.com/go-enry/go-oniguruma"
+	onigmo "github.com/go-enry/go-onigmo"
+
 	"github.com/open-telemetry/opentelemetry-collector-contrib/pkg/ottl"
 )
 
@@ -33,13 +34,13 @@ func createExtractPatternsRubyRegexFunction[K any](_ ottl.FunctionContext, oArgs
 }
 
 func extractPatternsRubyRegex[K any](target ottl.StringGetter[K], pattern string) (ottl.ExprFunc[K], error) {
-	r, err := oniguruma.Compile(pattern)
+	r, err := onigmo.Compile(pattern)
 	if err != nil {
 		return nil, fmt.Errorf("the pattern supplied to ExtractPatternsRubyRegex is not a valid pattern: %w", err)
 	}
 
 	namedCaptureGroups := 0
-	for _, groupName := range r.getNamedGroupInfo() {
+	for _, groupName := range r.SubexpNames() {
 		if groupName != "" {
 			namedCaptureGroups++
 		}
