@@ -63,12 +63,8 @@ func extractPatternsRubyRegex[K any](target ottl.StringGetter[K], pattern string
 
 		result := pcommon.NewMap()
 		for i, subexp := range r.SubexpNames() {
-			if i == 0 {
-				// Skip whole match
-				continue
-			}
 			if subexp != "" {
-				result.PutStr(subexp, matches[i])
+				result.PutStr(subexp, matches[i+1])
 			}
 		}
 		return result, err
